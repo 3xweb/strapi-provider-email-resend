@@ -1,5 +1,8 @@
 # Resend Email Provider for Strapi v5
 
+[![npm version](https://img.shields.io/npm/v/@3xweb/strapi-provider-email-resend)](https://www.npmjs.com/package/@3xweb/strapi-provider-email-resend)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A lightweight email provider for Strapi v5 powered by the official Resend SDK.
 
 ## Features
