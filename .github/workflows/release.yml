@@ -18,8 +18,8 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
-          package-name: "@3xweb/strapi-provider-email-resend"
 
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
