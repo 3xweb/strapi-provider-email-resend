@@ -1,5 +1,5 @@
 {
-  "name": "@stara/strapi-provider-email-resend",
+  "name": "@3xweb/strapi-provider-email-resend",
   "version": "1.0.0",
   "description": "Resend email provider for Strapi v5",
   "main": "./src/index.js",
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/3xweb/strapi-provider-email-resend.git"
   },
-  "author": "Stara",
+  "author": "3xweb",
   "license": "MIT",
   "homepage": "https://github.com/3xweb/strapi-provider-email-resend#readme",
   "bugs": {
