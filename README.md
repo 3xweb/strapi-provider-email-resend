@@ -1,34 +1,38 @@
-# Strapi Email Provider - Resend
+# Resend Email Provider for Strapi v5
 
-Provider de e-mail para Strapi utilizando a API da Resend.
+A lightweight email provider for Strapi v5 powered by the official Resend SDK.
 
-## Compatibilidade
+## Features
 
-* Strapi v5
+* Compatible with Strapi v5
+* Uses the official Resend SDK
+* Supports HTML and plain text emails
+* Supports CC, BCC and Reply-To
+* Passes through additional Resend options
+* No build step required
 * Node.js 18+
-* Resend SDK 6.x
 
-## Instalação
+## Requirements
+
+* Node.js 18 or later
+* Strapi v5
+* A Resend account and API key
+
+## Installation
 
 ```bash
-npm install resend
+npm install @3xweb/strapi-provider-email-resend
 ```
 
-ou, se estiver utilizando este provider como pacote:
+## Configuration
 
-```bash
-npm install @stara/strapi-provider-email-resend
-```
-
-## Configuração do Strapi
-
-Arquivo `config/plugins.ts`:
+Create or update `config/plugins.ts`:
 
 ```ts
 export default ({ env }) => ({
   email: {
     config: {
-      provider: "@stara/strapi-provider-email-resend",
+      provider: "@3xweb/strapi-provider-email-resend",
 
       providerOptions: {
         apiKey: env("RESEND_API_KEY"),
@@ -43,98 +47,64 @@ export default ({ env }) => ({
 });
 ```
 
-## Variáveis de Ambiente
+## Environment Variables
 
 ```env
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxx
 
-EMAIL_FROM=Stara <noreply@staraapp.com.br>
-EMAIL_REPLY_TO=suporte@staraapp.com.br
+EMAIL_FROM=My App <noreply@example.com>
+EMAIL_REPLY_TO=support@example.com
 ```
 
-## Implementação
-
-```js
-"use strict";
-
-const { Resend } = require("resend");
-
-module.exports = {
-  provider: "resend",
-  name: "Resend",
-
-  init(providerOptions, settings) {
-    const resend = new Resend(providerOptions.apiKey);
-
-    return {
-      async send(options) {
-        const {
-          from,
-          to,
-          cc,
-          bcc,
-          replyTo,
-          subject,
-          text,
-          html,
-          ...rest
-        } = options;
-
-        return resend.emails.send({
-          from: from || settings.defaultFrom,
-          to,
-          cc,
-          bcc,
-          replyTo: replyTo || settings.defaultReplyTo,
-          subject,
-          text,
-          html,
-          ...rest,
-        });
-      },
-    };
-  },
-};
-```
-
-## Campos Suportados
-
-| Campo   | Descrição            |
-| ------- | -------------------- |
-| from    | Remetente do e-mail  |
-| to      | Destinatário(s)      |
-| cc      | Cópia                |
-| bcc     | Cópia oculta         |
-| replyTo | Endereço de resposta |
-| subject | Assunto              |
-| text    | Conteúdo texto puro  |
-| html    | Conteúdo HTML        |
-
-Qualquer campo adicional enviado pelo Strapi será repassado para a API da Resend através de `...rest`.
-
-## Exemplo de Uso
+## Usage
 
 ```js
 await strapi.plugins.email.services.email.send({
-  to: "usuario@email.com",
-  subject: "Bem-vindo",
-  html: "<h1>Olá!</h1><p>Sua conta foi criada com sucesso.</p>",
+  to: "user@example.com",
+  subject: "Welcome",
+  html: "<h1>Hello!</h1><p>Your account has been created.</p>",
 });
 ```
 
-## Comportamento
+## Supported Fields
 
-* Caso `from` não seja informado, será utilizado `settings.defaultFrom`.
-* Caso `replyTo` não seja informado, será utilizado `settings.defaultReplyTo`.
-* O provider utiliza uma única instância do cliente Resend por inicialização.
-* Os erros da API Resend são propagados para o Strapi para tratamento e logging.
+| Field   | Description                  |
+| ------- | ---------------------------- |
+| from    | Email sender                 |
+| to      | Recipient or recipients      |
+| cc      | Carbon copy recipients       |
+| bcc     | Blind carbon copy recipients |
+| replyTo | Reply-to address             |
+| subject | Email subject                |
+| text    | Plain text content           |
+| html    | HTML content                 |
 
-## Segurança
+Any additional properties provided by Strapi are forwarded directly to the Resend SDK.
 
-Este provider utiliza o SDK oficial mais recente da Resend, evitando vulnerabilidades conhecidas presentes em versões antigas do pacote.
+## Default Behavior
 
-Recomenda-se manter a dependência sempre atualizada:
+If `from` is not provided, the provider uses `settings.defaultFrom`.
 
-```bash
-npm update resend
+If `replyTo` is not provided, the provider uses `settings.defaultReplyTo`.
+
+A single Resend client instance is created during Strapi startup and reused for all email requests.
+
+Errors returned by the Resend API are propagated to Strapi, allowing normal logging and error handling.
+
+## Example
+
+```js
+await strapi.plugins.email.services.email.send({
+  from: "notifications@example.com",
+  to: "user@example.com",
+  subject: "Test Email",
+  text: "This is a test email.",
+});
 ```
+
+## License
+
+MIT
+
+## Notes
+Originally based on the strapi-provider-email-resend project by Jerod Fritz, updated for Strapi v5 and the latest Resend SDK.

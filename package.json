@@ -14,13 +14,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stara-org/stara-strapi-provider-email-resend.git"
+    "url": "git+https://github.com/3xweb/strapi-provider-email-resend.git"
   },
   "author": "Stara",
   "license": "MIT",
-  "homepage": "https://github.com/stara-org/stara-strapi-provider-email-resend#readme",
+  "homepage": "https://github.com/3xweb/strapi-provider-email-resend#readme",
   "bugs": {
-    "url": "https://github.com/stara-org/stara-strapi-provider-email-resend/issues"
+    "url": "https://github.com/3xweb/strapi-provider-email-resend/issues"
   },
   "engines": {
     "node": ">=18"
