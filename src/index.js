@@ -67,12 +67,11 @@ module.exports = {
        * - subject
        * - text
        * - html
-       * - react
        * - template
        *
        * When `template` is provided, the provider forwards the
        * template payload directly to Resend and ignores content
-       * fields such as `html`, `text`, and `react`.
+       * fields such as `html` or `text`.
        *
        * Example:
        *
@@ -102,7 +101,6 @@ module.exports = {
           subject,
           text,
           html,
-          react,
           template,
           ...rest
         } = options;
@@ -122,7 +120,6 @@ module.exports = {
         } else {
           payload.text = text;
           payload.html = html;
-          payload.react = react;
         }
 
         return resend.emails.send(payload);

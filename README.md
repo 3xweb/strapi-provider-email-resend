@@ -10,7 +10,6 @@ A lightweight email provider for Strapi v5 powered by the official Resend SDK.
 * Compatible with Strapi v5
 * Uses the official Resend SDK
 * Supports HTML and plain text emails
-* Supports React Email
 * Supports Resend Templates
 * Supports CC, BCC and Reply-To
 * Passes through additional Resend options
@@ -99,7 +98,7 @@ await strapi.plugins.email.services.email.send({
 });
 ```
 
-When using `template`, the provider sends only the template payload to Resend and does not include `html`, `text`, or `react`.
+When using `template`, the provider sends only the template payload to Resend and does not include `html` or `text`.
 
 ## Supported Fields
 
