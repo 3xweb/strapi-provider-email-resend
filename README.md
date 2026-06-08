@@ -10,6 +10,8 @@ A lightweight email provider for Strapi v5 powered by the official Resend SDK.
 * Compatible with Strapi v5
 * Uses the official Resend SDK
 * Supports HTML and plain text emails
+* Supports React Email
+* Supports Resend Templates
 * Supports CC, BCC and Reply-To
 * Passes through additional Resend options
 * No build step required
@@ -61,6 +63,8 @@ EMAIL_REPLY_TO=support@example.com
 
 ## Usage
 
+### HTML email
+
 ```js
 await strapi.plugins.email.services.email.send({
   to: "user@example.com",
@@ -69,18 +73,47 @@ await strapi.plugins.email.services.email.send({
 });
 ```
 
+### Plain text email
+
+```js
+await strapi.plugins.email.services.email.send({
+  to: "user@example.com",
+  subject: "Welcome",
+  text: "Hello! Your account has been created.",
+});
+```
+
+### Resend Template
+
+```js
+await strapi.plugins.email.services.email.send({
+  to: "user@example.com",
+  subject: "Welcome",
+  template: {
+    id: "welcome-email",
+    variables: {
+      name: "Douglas",
+      loginUrl: "https://example.com/login",
+    },
+  },
+});
+```
+
+When using `template`, the provider sends only the template payload to Resend and does not include `html`, `text`, or `react`.
+
 ## Supported Fields
 
-| Field   | Description                  |
-| ------- | ---------------------------- |
-| from    | Email sender                 |
-| to      | Recipient or recipients      |
-| cc      | Carbon copy recipients       |
-| bcc     | Blind carbon copy recipients |
-| replyTo | Reply-to address             |
-| subject | Email subject                |
-| text    | Plain text content           |
-| html    | HTML content                 |
+| Field    | Description                   |
+| -------- | ----------------------------- |
+| from     | Email sender                  |
+| to       | Recipient or recipients       |
+| cc       | Carbon copy recipients        |
+| bcc      | Blind carbon copy recipients  |
+| replyTo  | Reply-to address              |
+| subject  | Email subject                 |
+| text     | Plain text content            |
+| html     | HTML content                  |
+| template | Resend Template configuration |
 
 Any additional properties provided by Strapi are forwarded directly to the Resend SDK.
 
@@ -94,16 +127,13 @@ A single Resend client instance is created during Strapi startup and reused for 
 
 Errors returned by the Resend API are propagated to Strapi, allowing normal logging and error handling.
 
-## Example
+## Notes
 
-```js
-await strapi.plugins.email.services.email.send({
-  from: "notifications@example.com",
-  to: "user@example.com",
-  subject: "Test Email",
-  text: "This is a test email.",
-});
-```
+This provider supports both standard Strapi email templates and Resend Templates.
+
+For Strapi built-in emails, such as password reset and email confirmation, Strapi usually generates the `html` or `text` content internally and sends it through the configured email provider.
+
+Resend Templates are useful for custom application emails where you want the template content to live inside Resend.
 
 ## License
 

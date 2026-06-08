@@ -3,44 +3,45 @@
 const { Resend } = require("resend");
 
 /**
- * Strapi Email Provider - Resend
+ * Resend Email Provider for Strapi.
  *
- * Este provider implementa a interface esperada pelo plugin Email
- * do Strapi e utiliza a API oficial da Resend para envio de mensagens.
+ * This provider implements the interface expected by the
+ * Strapi Email plugin and uses the official Resend SDK
+ * to send emails.
  *
- * Configuração esperada:
+ * Expected configuration:
  *
  * providerOptions: {
  *   apiKey: "re_xxxxxxxxx"
  * }
  *
  * settings: {
- *   defaultFrom: "Stara <noreply@staraapp.com.br>",
- *   defaultReplyTo: "suporte@staraapp.com.br"
+ *   defaultFrom: "My App <noreply@example.com>",
+ *   defaultReplyTo: "support@example.com"
  * }
  */
 module.exports = {
   /**
-   * Nome interno do provider.
+   * Internal provider identifier.
    */
   provider: "resend",
 
   /**
-   * Nome exibido pelo Strapi.
+   * Human-readable provider name.
    */
   name: "Resend",
 
   /**
-   * Inicializa o provider.
+   * Initializes the provider.
    *
-   * Executado uma única vez durante o bootstrap da aplicação.
+   * Called once during the Strapi bootstrap process.
    *
    * @param {Object} providerOptions
-   * @param {string} providerOptions.apiKey
+   * @param {string} providerOptions.apiKey - Resend API key.
    *
    * @param {Object} settings
-   * @param {string} settings.defaultFrom
-   * @param {string} settings.defaultReplyTo
+   * @param {string} settings.defaultFrom - Default sender address.
+   * @param {string} settings.defaultReplyTo - Default reply-to address.
    *
    * @returns {{ send: Function }}
    */
@@ -50,14 +51,14 @@ module.exports = {
         "Missing Resend API key. Please configure providerOptions.apiKey.",
       );
     }
-    
+
     const resend = new Resend(providerOptions.apiKey);
 
     return {
       /**
-       * Envia um e-mail utilizando a API da Resend.
+       * Sends an email using the Resend API.
        *
-       * Campos suportados:
+       * Supported fields:
        * - from
        * - to
        * - cc
@@ -66,28 +67,65 @@ module.exports = {
        * - subject
        * - text
        * - html
+       * - react
+       * - template
        *
-       * Qualquer propriedade adicional é encaminhada
-       * diretamente para o SDK da Resend.
+       * When `template` is provided, the provider forwards the
+       * template payload directly to Resend and ignores content
+       * fields such as `html`, `text`, and `react`.
        *
-       * @param {Object} options
+       * Example:
+       *
+       * template: {
+       *   id: "welcome-email",
+       *   variables: {
+       *     name: "Jane Doe",
+       *     signupDate: "2024-01-01",
+       *     foo: "bar",
+       *   }
+       * }
+       *
+       * Any additional properties are forwarded directly to the
+       * Resend SDK, allowing support for future Resend features
+       * without requiring provider updates.
+       *
+       * @param {Object} options - Email options.
        * @returns {Promise<Object>}
        */
       async send(options) {
-        const { from, to, cc, bcc, replyTo, subject, text, html, ...rest } =
-          options;
+        const {
+          from,
+          to,
+          cc,
+          bcc,
+          replyTo,
+          subject,
+          text,
+          html,
+          react,
+          template,
+          ...rest
+        } = options;
 
-        return resend.emails.send({
+        const payload = {
           from: from || settings.defaultFrom,
           to,
           cc,
           bcc,
           replyTo: replyTo || settings.defaultReplyTo,
           subject,
-          text,
-          html,
           ...rest,
-        });
+        };
+
+        if (template) {
+          payload.template = template;
+        } else {
+          payload.text = text;
+          payload.html = html;
+          payload.react = react;
+        }
+
+        return resend.emails.send(payload);
       },
     };
   },
