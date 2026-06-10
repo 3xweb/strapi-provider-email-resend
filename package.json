@@ -1,6 +1,6 @@
 {
   "name": "@3xweb/strapi-provider-email-resend",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Resend email provider for Strapi v5",
   "main": "./src/index.js",
   "files": [

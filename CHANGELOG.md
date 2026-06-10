@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/3xweb/strapi-provider-email-resend/compare/v1.2.0...v1.2.1) (2026-06-10)
+
+
+### Bug Fixes
+
+* use node 24 for trusted publishing ([e475c92](https://github.com/3xweb/strapi-provider-email-resend/commit/e475c926307252a890bdc26b7aa2fd187d453325))
+* use node 24 for trusted publishing ([5cbcd32](https://github.com/3xweb/strapi-provider-email-resend/commit/5cbcd325e49ecb540611fa5402606b09617cead0))
+
 ## [1.2.0](https://github.com/3xweb/strapi-provider-email-resend/compare/v1.1.0...v1.2.0) (2026-06-10)
 
 
