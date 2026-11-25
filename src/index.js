@@ -122,7 +122,11 @@ module.exports = {
           payload.html = html;
         }
 
-        return resend.emails.send(payload);
+        const result = await resend.emails.send(payload);
+        if (result.error) {
+          throw new Error("Resend could not send the email.");
+        }
+        return result;
       },
     };
   },
