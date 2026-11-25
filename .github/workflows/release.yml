@@ -34,3 +34,27 @@ jobs:
 
       - run: npm publish --access public
         if: ${{ steps.release.outputs.release_created }}
+
+      - name: Publish an existing release missing from npm
+        if: ${{ steps.release.outputs.release_created != 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="v$version"
+          if ! gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            exit 0
+          fi
+          status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' \
+            "https://registry.npmjs.org/@3xweb%2fstrapi-provider-email-resend/$version")"
+          case "$status" in
+            200) exit 0 ;;
+            404) ;;
+            *) echo "Could not verify the npm version (HTTP $status)" >&2; exit 1 ;;
+          esac
+          git fetch --no-tags origin "refs/tags/$tag"
+          git checkout --detach FETCH_HEAD
+          npm ci
+          npm test
+          npm publish --access public
