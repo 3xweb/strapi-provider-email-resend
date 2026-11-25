@@ -23,10 +23,10 @@
     "url": "https://github.com/3xweb/strapi-provider-email-resend/issues"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
-    "resend": "^6.12.4"
+    "resend": "^6.39.0"
   },
   "peerDependencies": {
     "@strapi/strapi": "^5.0.0"
@@ -35,5 +35,8 @@
     "@strapi/strapi": {
       "optional": true
     }
+  },
+  "scripts": {
+    "test": "node --test"
   }
 }

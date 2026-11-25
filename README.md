@@ -14,11 +14,11 @@ A lightweight email provider for Strapi v5 powered by the official Resend SDK.
 * Supports CC, BCC and Reply-To
 * Passes through additional Resend options
 * No build step required
-* Node.js 18+
+* Node.js 20+
 
 ## Requirements
 
-* Node.js 18 or later
+* Node.js 20 or later, subject to the Node.js range required by your Strapi version
 * Strapi v5
 * A Resend account and API key
 
@@ -124,7 +124,13 @@ If `replyTo` is not provided, the provider uses `settings.defaultReplyTo`.
 
 A single Resend client instance is created during Strapi startup and reused for all email requests.
 
-Errors returned by the Resend API are propagated to Strapi, allowing normal logging and error handling.
+On success, the provider returns the SDK response, including `data.id`. If the Resend SDK returns an API error, the provider rejects with a generic message. The error does not include the SDK response, recipients, email content or credentials. Configure an error handler at the call site as needed.
+
+Set `EMAIL_FROM` to a sender on a domain verified in Resend. Store `RESEND_API_KEY` in your private environment configuration.
+
+## Development
+
+Run `npm ci` and `npm test`. The suite mocks the SDK HTTP transport, so it does not require credentials or send email.
 
 ## Notes
 
