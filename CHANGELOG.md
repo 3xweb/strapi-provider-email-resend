@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/3xweb/strapi-provider-email-resend/compare/v1.2.1...v1.2.2) (2026-11-25)
+
+
+### Bug Fixes
+
+* report Resend delivery errors and update SDK ([162d143](https://github.com/3xweb/strapi-provider-email-resend/commit/162d143b8637c8de568978752ac3c3e3c8c9f987))
+
 ## [1.2.1](https://github.com/3xweb/strapi-provider-email-resend/compare/v1.2.0...v1.2.1) (2026-06-10)
 
 
